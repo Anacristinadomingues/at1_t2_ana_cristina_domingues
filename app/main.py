@@ -1,17 +1,16 @@
-# app/main.py
 from fastapi import FastAPI, HTTPException
 
-app = FastAPI(title="FastAPI TDD Example")
+app = FastAPI()
 
-# base de dados em memória
-_items = {
+# Banco de dados fake
+ITEMS = {
     1: {"id": 1, "name": "Item 1"},
     2: {"id": 2, "name": "Item 2"},
+    3: {"id": 3, "name": "Item 3"},
 }
 
 @app.get("/items/{item_id}")
-def read_item(item_id: int):
-    item = _items.get(item_id)
-    if item is None:
-        raise HTTPException(status_code=404, detail="Item não existe")
-    return item
+def get_item(item_id: int):
+    if item_id in ITEMS:
+        return ITEMS[item_id]
+    raise HTTPException(status_code=404, detail="Item não existe")
